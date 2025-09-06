@@ -1,21 +1,32 @@
 package com.kekich.payloadservice.service;
 
-import com.kekich.payloadservice.model.OrderEvent;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kekich.payloadservice.DTO.OrderDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Component
 @Slf4j
 public class KafkaConsumerService {
 
+
+
     @KafkaListener(topics = "topic-1", groupId = "kek")
     public void consumeOrderEvent(String message) {
         log.info("Received order event: {}", message);
-        System.out.println(message);
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            OrderDTO orderDTO = mapper.readValue(message, OrderDTO.class);
+            log.info("Received order event: {}", orderDTO);
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 }
