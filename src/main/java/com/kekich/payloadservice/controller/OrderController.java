@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/getOrder")
 public class OrderController {
-    private final KafkaConsumerService kafkaConsumerService;
-    public OrderController(KafkaConsumerService kafkaConsumerService) {
-        this.kafkaConsumerService = kafkaConsumerService;
-    }
+
 
 
 
